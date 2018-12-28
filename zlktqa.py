@@ -50,6 +50,13 @@ def regist():
                 db.session.commit()
                 return redirect(url_for('login'))
 
+@app.route('/logout/')
+def logout():
+    #session.pop("user_id")
+    #del.session("user_id")
+    session.clear()
+    return redirect(url_for("login"))
+
 @app.context_processor
 def my_context_processor():
     user_id = session.get('user_id')
