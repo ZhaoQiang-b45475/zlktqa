@@ -2,7 +2,7 @@
 
 from flask import Flask, render_template, request, redirect, url_for, session
 import config
-from models import User, Question
+from models import User, Question, Answer
 from exts import db
 from decorators import login_required
 
@@ -83,6 +83,21 @@ def question():
 def detail(question_id):
     question_model = Question.query.filter(Question.id == question_id).first()
     return render_template("detail.html", question=question_model)
+
+@app.route('/add_answer', methods = ['POST'])
+@login_required
+def add_answer():
+    content = request.form.get("answer_content")
+    question_id = request.form.get("question_id")
+    answer = Answer(content = content)
+    user_id = session.get("user_id")
+    user = User.query.filter(User.id == user_id).first()
+    answer.author = user
+    question = Question.query.filter(Question.id == question_id).first()
+    answer.question = question
+    db.session.add(answer)
+    db.session.commit()
+    return redirect(url_for("detail", question_id = question_id))
 
 @app.context_processor
 def my_context_processor():
