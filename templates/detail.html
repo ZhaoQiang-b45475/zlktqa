@@ -14,7 +14,7 @@
 	<hr>
 	<p class="question-content">{{ question.content }}</p>
 	<hr>
-	<h4>评论: (0)</h4>
+	<h4>评论: ({{ count }})</h4>
 	<form action="{{ url_for('add_answer') }}" method="post">
 		<div class="form-group">
 			<input name="answer_content" type="text" class="form-control" placeholder="请填写评论">
@@ -24,9 +24,15 @@
 			<button class="btn btn-primary">评论</button>
 		</div>
 	</form>
-	<ul>
+	<ul class="answer-list">
 		{% for answer in question.answers %}
-		<li>{{ answer.content }}
+		<li>
+			<div class="user-info">
+				<img src="{{ url_for('static', filename='images/p1.jpg') }}" alt="" class="avatar">
+				<span class="username">{{ answer.author.username }}</span>
+				<span class="create-time">{{ answer.create_time }}</span>
+			</div>
+			<p class="answer-content">{{ answer.content }}</p>
 		</li>
 		{% endfor %}
 	</ul>
